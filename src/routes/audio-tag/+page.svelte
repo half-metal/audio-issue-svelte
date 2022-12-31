@@ -5,11 +5,12 @@
  * @route
  * URL from any site typically runs fine,
  * but URL returned in response by Svelte plays, 
- * but unable to determine duration of file or seek when not fully download
+ * but unable to determine duration of file or ability to seek when not fully download
 */
-
-    import {IconHeart, IconPlay, IconPause, IconBackward, IconForward, IconAudio} from '$lib/assets/player/AudioPlayerIcons.js';
+	//this url works fine and returns 206 status code and range of bytes
     //let url = 'https://download.pariyatti.org/free/_moIbLs95/Dana_The_Practice_of_Giving_single.mp3'
+
+	//this url sends file with 200 status code but unable to determine duration 
     let url = 'http://localhost:5173/fileAudio?fileName=enchanted-svelte.mp3&fileFolderPath=audio'
 
     //let url = 'http://localhost:5173/fileAudio?fileName=clip.mp3&fileFolderPath=audio'

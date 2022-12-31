@@ -3,22 +3,15 @@
  * 
  */
 import { json } from '@sveltejs/kit';
-// import { Readable } from 'node:stream';
+// import { Readable } from 'node:stream'; //if you use Readable.toWeb()
 
 export const settings = [
-    {id: 1, name:"imagePath", value:"/Users/brockboss/apps/audio-svelte/src/lib/assets/"},
-    {id: 2, name:"altImagePath", value:"/apps/audio-svelte/src/lib/assets/"},
-    {id: 3, name:"audioPath", value:"/apps/new-showglobe/src/lib/assets/"}
+    {id: 1, name:"audioPath", value:"/Users/brockboss/apps/audio-svelte/src/lib/assets/"}
 
 ]
 
-//import { Readable } from 'node:stream';
-//import {WritableStream} from 'node:stream/web';
 /** @typedef {import('fs').WriteStream} WriteStream */
 import fsp from 'node:fs/promises'
-//import fsb from 'fs-backwards-stream'
-//const filePath = `${settings[0].value}${fileLocation}`
-
 
 //'audio/mp4' works for m4a but unable to seek in browser
 //'audio/mp3' works for mp3
@@ -43,7 +36,6 @@ export async function GET({url}) {
     console.log("@debug get function called, url is",url);
     const fileFolderPath = url.searchParams.get('fileFolderPath')
     console.log("@debug fileFolderPath is",fileFolderPath);
-
     const fileName = url.searchParams.get('fileName')
     let filePath = `${settings[0].value}${fileFolderPath}`
     console.log("@debug filePath is",filePath);
@@ -54,10 +46,11 @@ export async function GET({url}) {
     const fd = await fsp.open(file)
     /** @class Stream */
     const readStream = fd.createReadStream()
-    //const responseFile = fd.readFile(file)
+    //const responseFile = fd.readFile(file) //this was purely reading the file into memory, which isn't ideal.
     let debugResponse = new Response(readStream, { headers: responseHeaders });
     console.log('debugResponse',debugResponse);
-    return new Response(readStream, { headers: responseHeaders });
-    //return json(readStream)
+    //attempting to set status:206 partial download, remove status to see page working
+    return new Response(readStream, status:206, { headers: responseHeaders });
+    //return json(readStream) //alternate way to return.
 
 }
